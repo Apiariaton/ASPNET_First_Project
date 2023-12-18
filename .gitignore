@@ -1,0 +1,9 @@
+bin/
+Properties
+obj/
+appsettings.Development.json
+appsettings.json
+NZWalks.csproj
+NZWalks.http
+NZWalks.sln
+
