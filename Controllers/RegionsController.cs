@@ -52,6 +52,11 @@ namespace NZWalks.API.Controllers
         public IActionResult GetById([FromRoute] Guid id)
         {
 
+            //Alternative for properties which are not ID:
+            //x.Id / x.Name
+            //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+            //Only works for Id
             var region = dbContext.Regions.Find(id);
             if (region == null)
             {
