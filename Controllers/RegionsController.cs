@@ -42,11 +42,27 @@ namespace NZWalks.API.Controllers
             //     }
             // };
 
-
-        
             return Ok(regions);
         }
 
+        //Get region by id
+        //Return Not Found if not found
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult GetById([FromRoute] Guid id)
+        {
+
+            var region = dbContext.Regions.Find(id);
+            if (region == null)
+            {
+
+                return NotFound();
+
+            }
+            
+            return Ok(region);
+
+        }
     }
 
 
