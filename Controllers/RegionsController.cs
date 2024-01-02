@@ -22,7 +22,20 @@ namespace NZWalks.API.Controllers
         public IActionResult GetAll()
         {
 
-            var regions = dbContext.Regions.ToList();
+            var regionsList = dbContext.Regions.ToList();
+
+            var regionsDataTransferObject = new List<RegionDto>();
+            foreach (var region in regionsList)
+            {
+                regionsDto.Add(newRegionDto(){
+                    Id = regionsList.id,
+                    Code = regionsList.Code,
+                    Name = regionsList.Name,
+                    RegionImageUrl = regionsList.RegionImageUrl
+                });               
+            }
+
+            //Map regions to Data Transfer Object
 
             // var regions = new List<Region>
             // {
@@ -57,18 +70,27 @@ namespace NZWalks.API.Controllers
             //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
             //Only works for Id
-            var region = dbContext.Regions.Find(id);
+            var regionInstance = dbContext.Regions.Find(id);
+            
+            
             if (region == null)
             {
 
                 return NotFound();
 
             }
-            
-            return Ok(region);
+
+            //Map regionInstance to Data Transfer Object
+            var regionDataTransferObject = new RegionDto{
+                Id = regionInstance.Id
+                Code = regionInstance.Code,
+                Name = regionInstance.Name,
+                RegionImageUrl = regionInstance.RegionImageUrl
+            };
+
+            return Ok(regionregionDataTransferObject);
 
         }
     }
-
 
 }
