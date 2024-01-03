@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Data;
+using NZWalks.API.Models.Domain;
+using NZWalks.API.Models.DTO;
 
 namespace NZWalks.API.Controllers
 {
@@ -27,13 +29,13 @@ namespace NZWalks.API.Controllers
             var regionsDataTransferObject = new List<RegionDto>();
             foreach (var region in regionsList)
             {
-                regionsDto.Add(newRegionDto(){
-                    Id = regionsList.id,
-                    Code = regionsList.Code,
-                    Name = regionsList.Name,
-                    RegionImageUrl = regionsList.RegionImageUrl
+                regionsDataTransferObject.Add(new RegionDto(){
+                    Id = region.Id,
+                    Code = region.Code,
+                    Name = region.Name,
+                    RegionImageUrl = region.RegionImageUrl
                 });               
-            }
+            };
 
             //Map regions to Data Transfer Object
 
@@ -55,7 +57,7 @@ namespace NZWalks.API.Controllers
             //     }
             // };
 
-            return Ok(regions);
+            return Ok(regionsDataTransferObject);
         }
 
         //Get region by id
@@ -73,22 +75,22 @@ namespace NZWalks.API.Controllers
             var regionInstance = dbContext.Regions.Find(id);
             
             
-            if (region == null)
+            if (regionInstance == null)
             {
 
                 return NotFound();
 
-            }
+            };
 
             //Map regionInstance to Data Transfer Object
             var regionDataTransferObject = new RegionDto{
-                Id = regionInstance.Id
+                Id = regionInstance.Id,
                 Code = regionInstance.Code,
                 Name = regionInstance.Name,
                 RegionImageUrl = regionInstance.RegionImageUrl
             };
 
-            return Ok(regionregionDataTransferObject);
+            return Ok(regionDataTransferObject);
 
         }
     }
