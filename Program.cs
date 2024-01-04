@@ -15,6 +15,7 @@ builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(
 
 var app = builder.Build();
 
+//http://localhost:5170/swagger/index.html
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

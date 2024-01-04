@@ -93,6 +93,30 @@ namespace NZWalks.API.Controllers
             return Ok(regionDataTransferObject);
 
         }
+
+
+        [HttpPost]
+        public IActionResult Create([FromBody] NewRegionTemplateDto newRegionTemplateDto)
+        {
+            //Map or Convert DTO to Domain Model
+            var regionCreatedFromPostRequest = new Region {
+                Code = newRegionTemplateDto.Code,
+                Name = newRegionTemplateDto.Name,
+                RegionImageUrl = newRegionTemplateDto.RegionImageUrl
+            };
+
+
+            // Use Domain Model to create Region
+            dbContext.Regions.Add(regionCreatedFromPostRequest);
+            dbContext.SaveChanges();
+
+            return CreatedAtAction();
+
+
+
+        }
+
+
     }
 
 }
