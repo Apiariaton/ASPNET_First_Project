@@ -110,9 +110,17 @@ namespace NZWalks.API.Controllers
             dbContext.Regions.Add(regionCreatedFromPostRequest);
             dbContext.SaveChanges();
 
-            return CreatedAtAction();
 
+            //Create a data transfer object for the newly created region
+            var regionCreatedFromPostRequestDTO = new Region {
+                Id = regionCreatedFromPostRequest.Id,
+                Code = regionCreatedFromPostRequest.Code,
+                Name = regionCreatedFromPostRequest.Name,
+                RegionImageUrl = regionCreatedFromPostRequest.RegionImageUrl
+            };
 
+            //See: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.createdataction?view=aspnetcore-8.0
+            return CreatedAtAction(nameof(GetById), new {id = regionCreatedFromPostRequest.Id}, regionCreatedFromPostRequestDTO);
 
         }
 

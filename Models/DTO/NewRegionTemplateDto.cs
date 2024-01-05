@@ -1,4 +1,4 @@
-namespace NZWalks.Models.API.DTO
+namespace NZWalks.API.Models.DTO
 {
 
     public class NewRegionTemplateDto 
