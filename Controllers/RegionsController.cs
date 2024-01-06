@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
@@ -21,10 +22,10 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
 
-            var regionsList = dbContext.Regions.ToList();
+            var regionsList = await dbContext.Regions.ToListAsync();
 
             var regionsDataTransferObject = new List<RegionDto>();
             foreach (var region in regionsList)
