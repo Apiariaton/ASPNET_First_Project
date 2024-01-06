@@ -65,7 +65,7 @@ namespace NZWalks.API.Controllers
         //Return Not Found if not found
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
 
             //Alternative for properties which are not ID:
@@ -73,7 +73,7 @@ namespace NZWalks.API.Controllers
             //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
             //Only works for Id
-            var regionInstance = dbContext.Regions.Find(id);
+            var regionInstance = await dbContext.Regions.FindAsync(id);
             
             
             if (regionInstance == null)
@@ -97,7 +97,7 @@ namespace NZWalks.API.Controllers
 
 
         [HttpPost]
-        public IActionResult Create([FromBody] NewRegionTemplateDto newRegionTemplateDto)
+        public async Task<IActionResult> Create([FromBody] NewRegionTemplateDto newRegionTemplateDto)
         {
             //Map or Convert DTO to Domain Model
             var regionCreatedFromPostRequest = new Region {
@@ -108,8 +108,8 @@ namespace NZWalks.API.Controllers
 
 
             // Use Domain Model to create Region
-            dbContext.Regions.Add(regionCreatedFromPostRequest);
-            dbContext.SaveChanges();
+            await dbContext.Regions.AddAsync(regionCreatedFromPostRequest);
+            dbContext.SaveChangesAsync();
 
 
             //Create a data transfer object for the newly created region
@@ -128,10 +128,10 @@ namespace NZWalks.API.Controllers
         
         [HttpPut]
         [Route("{id:Guid}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionTemplateDto updateRegionTemplateDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionTemplateDto updateRegionTemplateDto)
         {
     
-            var regionLocatedWithRouteID = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionLocatedWithRouteID = await dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
             
             if (regionLocatedWithRouteID == null)
             {
@@ -157,9 +157,9 @@ namespace NZWalks.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        public IActionResult Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var regionLocatedWithRouteID = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionLocatedWithRouteID = await dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (regionLocatedWithRouteID == null)
             {
@@ -167,7 +167,7 @@ namespace NZWalks.API.Controllers
             }
 
             dbContext.Regions.Remove(regionLocatedWithRouteID);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
 
             var deletedRegionDTO = new RegionDto{
