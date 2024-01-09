@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 //Inject DBContext Class
 builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnectionString")));
 
+//Inject IRegionRepository with SQLRegionRepository / InMemoryRegionRepository
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 
 var app = builder.Build();
