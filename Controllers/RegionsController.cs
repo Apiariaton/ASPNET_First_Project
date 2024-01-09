@@ -69,7 +69,7 @@ namespace NZWalks.API.Controllers
         //Return Not Found if not found
         [HttpGet]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
 
             //Alternative for properties which are not ID:
@@ -77,7 +77,7 @@ namespace NZWalks.API.Controllers
             //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
             //Only works for Id
-            var regionInstance = await dbContext.Regions.FindAsync(id);
+            var regionInstance = await regionRepository.GetById(id);
             
             
             if (regionInstance == null)
@@ -112,8 +112,7 @@ namespace NZWalks.API.Controllers
 
 
             // Use Domain Model to create Region
-            await dbContext.Regions.AddAsync(regionCreatedFromPostRequest);
-            dbContext.SaveChangesAsync();
+            regionCreatedFromPostRequest = await regionRepository.CreateAsync(regionCreatedFromPostRequest);
 
 
             //Create a data transfer object for the newly created region
@@ -132,27 +131,27 @@ namespace NZWalks.API.Controllers
         
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionTemplateDto updateRegionTemplateDto)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateRegionTemplateDto updateRegionTemplateDto)
         {
     
-            var regionLocatedWithRouteID = await dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
-            
-            if (regionLocatedWithRouteID == null)
+            var modelToUpdateRegionByID = new Region{
+                Code = updateRegionTemplateDto.Code,
+                Name = updateRegionTemplateDto.Name,
+                RegionImageUrl = updateRegionTemplateDto.RegionImageUrl
+            }; 
+
+            modelToUpdateRegionByID = await regionRepository.UpdateAsync(id, modelToUpdateRegionByID);
+
+            if (modelToUpdateRegionByID == null)
             {
                 return NotFound();
             }
 
-            regionLocatedWithRouteID.Code = updateRegionTemplateDto.Code;
-            regionLocatedWithRouteID.Name = updateRegionTemplateDto.Name;
-            regionLocatedWithRouteID.RegionImageUrl = updateRegionTemplateDto.RegionImageUrl;
-
-            dbContext.SaveChanges();
-
             var changedRegionDTO = new RegionDto{
-                Id = regionLocatedWithRouteID.Id,
-                Code = regionLocatedWithRouteID.Code,
-                Name = regionLocatedWithRouteID.Name,
-                RegionImageUrl = regionLocatedWithRouteID.RegionImageUrl
+                Id = modelToUpdateRegionByID.Id,
+                Code = modelToUpdateRegionByID.Code,
+                Name = modelToUpdateRegionByID.Name,
+                RegionImageUrl = modelToUpdateRegionByID.RegionImageUrl
             };
 
             return Ok(changedRegionDTO);
