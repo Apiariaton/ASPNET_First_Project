@@ -69,6 +69,7 @@ namespace NZWalks.API.Controllers
         //Return Not Found if not found
         [HttpGet]
         [Route("{id:Guid}")]
+         [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
 
@@ -104,7 +105,7 @@ namespace NZWalks.API.Controllers
         public async Task<IActionResult> Create([FromBody] NewRegionTemplateDto newRegionTemplateDto)
         {
             //Map or Convert DTO to Domain Model
-            var regionCreatedFromPostRequest = new Region {
+            var regionCreatedFromPostRequest = new Region{
                 Code = newRegionTemplateDto.Code,
                 Name = newRegionTemplateDto.Name,
                 RegionImageUrl = newRegionTemplateDto.RegionImageUrl
@@ -124,7 +125,7 @@ namespace NZWalks.API.Controllers
             };
 
             //See: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.createdataction?view=aspnetcore-8.0
-            return CreatedAtAction(nameof(GetByIdAsync), new {id = regionCreatedFromPostRequest.Id}, regionCreatedFromPostRequestDTO);
+            return CreatedAtAction("GetByIdAsync", new {id = regionCreatedFromPostRequestDTO.Id}, regionCreatedFromPostRequestDTO);
 
         }
 
