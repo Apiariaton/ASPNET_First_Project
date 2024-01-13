@@ -77,7 +77,7 @@ namespace NZWalks.API.Controllers
             //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
             //Only works for Id
-            var regionInstance = await regionRepository.GetById(id);
+            var regionInstance = await regionRepository.GetByIdAsync(id);
             
             
             if (regionInstance == null)
@@ -124,7 +124,7 @@ namespace NZWalks.API.Controllers
             };
 
             //See: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.createdataction?view=aspnetcore-8.0
-            return CreatedAtAction(nameof(GetById), new {id = regionCreatedFromPostRequest.Id}, regionCreatedFromPostRequestDTO);
+            return CreatedAtAction(nameof(GetByIdAsync), new {id = regionCreatedFromPostRequest.Id}, regionCreatedFromPostRequestDTO);
 
         }
 
