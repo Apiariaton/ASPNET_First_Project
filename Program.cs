@@ -17,6 +17,7 @@ builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(
 //Inject IRegionRepository with SQLRegionRepository / InMemoryRegionRepository
 //When IRegionRepository is called, the second repository is called in its place.
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+builder.Services.AddScoped<IWalksRepository,SQLWalksRepository>();
 
 var app = builder.Build();
 
