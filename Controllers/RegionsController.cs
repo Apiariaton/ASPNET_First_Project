@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
@@ -104,6 +105,10 @@ namespace NZWalks.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] NewRegionTemplateDto newRegionTemplateDto)
         {
+
+            if (ModelState.IsValid)
+            {
+
             //Map or Convert DTO to Domain Model
             var regionCreatedFromPostRequest = new Region{
                 Code = newRegionTemplateDto.Code,
@@ -127,6 +132,11 @@ namespace NZWalks.API.Controllers
             //See: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.createdataction?view=aspnetcore-8.0
             return CreatedAtAction("GetByIdAsync", new {id = regionCreatedFromPostRequestDTO.Id}, regionCreatedFromPostRequestDTO);
 
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         
@@ -134,6 +144,9 @@ namespace NZWalks.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateRegionTemplateDto updateRegionTemplateDto)
         {
+
+            if (ModelState.IsValid)
+            {
     
             var modelToUpdateRegionByID = new Region{
                 Code = updateRegionTemplateDto.Code,
@@ -156,6 +169,11 @@ namespace NZWalks.API.Controllers
             };
 
             return Ok(changedRegionDTO);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
 

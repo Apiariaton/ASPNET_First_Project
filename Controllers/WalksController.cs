@@ -5,6 +5,7 @@ using NZWalks.API.Models.Domain;
 using NZWalks.API.Data;
 using NZWalks.API.Models.DTO;
 using NZWalks.API.Repositories;
+using NZWalks.API.CustomActionFilters;
 
 
 
@@ -30,6 +31,8 @@ public class WalksController : ControllerBase
     public async Task<IActionResult> Create([FromBody] NewWalkTemplateDTO newWalkTemplateDTO)
     {
     
+    if (ModelState.IsValid)
+    {
     var walkCreatedFromPostRequest = new Walk{
         Name = newWalkTemplateDTO.Name,
         Description = newWalkTemplateDTO.Description,
@@ -54,7 +57,11 @@ public class WalksController : ControllerBase
     };
 
     return CreatedAtAction("GetByIdAsync", new {id = walkCreatedFromPostRequestDTO.Id}, walkCreatedFromPostRequestDTO);
-
+    }
+    else
+    {
+        return BadRequest(ModelState);
+    }
     } 
 
 
@@ -119,10 +126,9 @@ public class WalksController : ControllerBase
 
     [HttpPut]
     [Route("{id:Guid}")]
+    [ValidateModel]
     public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWalkTemplateDto updateWalkTemplateDto)
     {
-
-
         var modelToUpdateWalkByID = new Walk{
             Name = updateWalkTemplateDto.Name,
             Description = updateWalkTemplateDto.Description,
@@ -151,10 +157,8 @@ public class WalksController : ControllerBase
         };
 
         return Ok(changedWalkDto);
-
-
-
-    }
+        }
+    
 
 
     [HttpDelete]
