@@ -35,8 +35,8 @@ public class WalksController : ControllerBase
         Description = newWalkTemplateDTO.Description,
         WalkLengthInKm = newWalkTemplateDTO.WalkLengthInKm,
         WalkImageUrl = newWalkTemplateDTO.WalkImageUrl,
-        Difficulty = newWalkTemplateDTO.Difficulty,
-        Region = newWalkTemplateDTO.Region
+        DifficultyId = newWalkTemplateDTO.DifficultyId,
+        RegionId = newWalkTemplateDTO.RegionId
     };
 
 
@@ -49,8 +49,8 @@ public class WalksController : ControllerBase
         Description = walkCreatedFromPostRequest.Description,
         WalkLengthInKm = walkCreatedFromPostRequest.WalkLengthInKm,
         WalkImageUrl = walkCreatedFromPostRequest.WalkImageUrl,
-        Difficulty = walkCreatedFromPostRequest.Difficulty,
-        Region = walkCreatedFromPostRequest.Region
+        DifficultyId = walkCreatedFromPostRequest.DifficultyId,
+        RegionId = walkCreatedFromPostRequest.RegionId
     };
 
     return CreatedAtAction("GetByIdAsync", new {id = walkCreatedFromPostRequestDTO.Id}, walkCreatedFromPostRequestDTO);
@@ -87,15 +87,103 @@ public class WalksController : ControllerBase
         return Ok(walkDataTransferObject);
 
     }
+  
+    
 
-        
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync()
+    {
+        var listOfWalks = await walksRepository.GetAllAsync();
+
+        var walksDataTransferObject = new List<WalkDto>();
+        foreach (var walk in listOfWalks)
+        {
+            walksDataTransferObject.Add(
+                new WalkDto(){
+                    Id = walk.Id,
+                    Name = walk.Name,
+                    Description = walk.Description,
+                    WalkLengthInKm = walk.WalkLengthInKm,
+                    WalkImageUrl = walk.WalkImageUrl,
+                    DifficultyId = walk.DifficultyId,
+                    RegionId = walk.RegionId,
+                    Difficulty = walk.Difficulty,
+                    Region = walk.Region    
+                }
+            );
+        }
+
+        return Ok(walksDataTransferObject);
+    }
+
+
+    [HttpPut]
+    [Route("{id:Guid}")]
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWalkTemplateDto updateWalkTemplateDto)
+    {
+
+
+        var modelToUpdateWalkByID = new Walk{
+            Name = updateWalkTemplateDto.Name,
+            Description = updateWalkTemplateDto.Description,
+            WalkImageUrl = updateWalkTemplateDto.WalkImageUrl,
+            WalkLengthInKm = updateWalkTemplateDto.WalkLengthInKm,
+            RegionId = updateWalkTemplateDto.RegionId,
+            DifficultyId = updateWalkTemplateDto.DifficultyId
+        };
+
+
+        modelToUpdateWalkByID = await walksRepository.UpdateAsync(id, modelToUpdateWalkByID);
+
+
+        if (modelToUpdateWalkByID == null)
+        {
+            return NotFound();
+        }
+
+        var changedWalkDto = new WalkDto{
+            Name = modelToUpdateWalkByID.Name,
+            Description = modelToUpdateWalkByID.Description,
+            WalkImageUrl = modelToUpdateWalkByID.WalkImageUrl,
+            WalkLengthInKm = modelToUpdateWalkByID.WalkLengthInKm,
+            RegionId = modelToUpdateWalkByID.RegionId,
+            DifficultyId = modelToUpdateWalkByID.DifficultyId
+        };
+
+        return Ok(changedWalkDto);
+
+
+
+    }
+
+
+    [HttpDelete]
+    [Route("{id:Guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id){
+
+        var walkLocatedByID = await walksRepository.DeleteAsync(id);
+
+        if (walkLocatedByID == null)
+        {
+
+            return NotFound();
+
+        }
+
+        var deletedWalkDTO = new WalkDto{
+            Name = walkLocatedByID.Name,
+            Description = walkLocatedByID.Description,
+            WalkLengthInKm = walkLocatedByID.WalkLengthInKm,
+            WalkImageUrl = walkLocatedByID.WalkImageUrl,
+            RegionId = walkLocatedByID.RegionId,
+            DifficultyId = walkLocatedByID.DifficultyId
+        };
+
+        return Ok(deletedWalkDTO);
+
     }
 
 
 
-
-
-
-
-
+    }
 }
