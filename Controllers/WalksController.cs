@@ -99,9 +99,9 @@ public class WalksController : ControllerBase
     //Get:/api/walks?filterOn=Name&filterQuery=Wellington
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+    public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
     {
-        var listOfWalks = await walksRepository.GetAllAsync(filterOn,filterQuery);
+        var listOfWalks = await walksRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending ?? true);
 
         var walksDataTransferObject = new List<WalkDto>();
         foreach (var walk in listOfWalks)
