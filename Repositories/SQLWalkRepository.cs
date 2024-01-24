@@ -38,6 +38,14 @@ namespace NZWalks.API.Repositories
                 {
                     listOfWalks = listOfWalks.Where(x => x.Name.Contains(filterQuery));
                 }
+                else if (filterOn.Equals("Difficulty"))
+                {
+                    listOfWalks = listOfWalks.Where(x=> x.Difficulty.Equals(filterQuery))
+                }
+                else if (filterOn.Equals("Description"))
+                {
+                    listOfWalks = listOfWalks.Where(x=> x.Description.Contains(filterQuery))
+                }
             }
 
             return await listOfWalks.ToListAsync();
