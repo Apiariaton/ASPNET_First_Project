@@ -40,7 +40,7 @@ namespace NZWalks.API.Repositories
                 }
                 else if (filterOn.Equals("Difficulty"))
                 {
-                    listOfWalks = listOfWalks.Where(x=> x.Difficulty.Equals(filterQuery));
+                    listOfWalks = listOfWalks.Where(x=> x.Difficulty.Name.Equals(filterQuery));
                 }
                 else if (filterOn.Equals("Description"))
                 {
