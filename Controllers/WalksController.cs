@@ -96,12 +96,14 @@ public class WalksController : ControllerBase
     }
   
     //GET Walks
-    //Get:/api/walks?filterOn=Name&filterQuery=Wellington
+    //Get:/api/walks?filterOn=Name&filterQuery=Wellington&sortBy&isAscending&pageNumber=1&pageSize=10 
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+    public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+    [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 100)
     {
-        var listOfWalks = await walksRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending ?? true);
+        var listOfWalks = await walksRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending ?? true,
+        pageNumber,pageSize);
 
         var walksDataTransferObject = new List<WalkDto>();
         foreach (var walk in listOfWalks)
