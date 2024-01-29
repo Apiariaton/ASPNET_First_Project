@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NZWalks.API.Data;
@@ -12,7 +13,7 @@ namespace NZWalks.API.Controllers
     // https:/localhost:3000/api/regions
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     public class RegionsController : ControllerBase
     {
 

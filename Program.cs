@@ -18,6 +18,9 @@ builder.Services.AddSwaggerGen();
 //Inject DBContext Class
 builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnectionString")));
 
+//Inject Authorization DBContext
+builder.Services.AddDbContext<NZWalksAuthDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksAuthConnectionString")));
+
 //Inject IRegionRepository with SQLRegionRepository / InMemoryRegionRepository
 //When IRegionRepository is called, the second repository is called in its place.
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
