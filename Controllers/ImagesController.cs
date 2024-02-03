@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
+using NZWalks.API.Repositories;
 
 namespace NZWalks.API.Controllers
 {
@@ -11,9 +13,10 @@ namespace NZWalks.API.Controllers
     public class ImagesController : ControllerBase
     {
 
-            public ImagesController (NZWalksDbContext dbContext) 
+            private readonly IImageRepository imageRepository;
+            public ImagesController (IImageRepository imageRepository) 
             {
-                this.dbContext = dbContext;
+                this.imageRepository = imageRepository;
             }
 
 
@@ -30,15 +33,16 @@ namespace NZWalks.API.Controllers
                     //Convert DTO to Database Model  
                     var imageDatabaseModel = new Image
                     {
-                        File = request.File,
-                        FileExtension = Path.GetExtension(request.File.FileName),
-                        FileSizeInBytes = request.File.Length,
-                        FileName = request.FileName,
-                        FileDescription = request.FileDescription,
+                        File = imageUploadRequestDto.File,
+                        FileExtension = Path.GetExtension(imageUploadRequestDto.File.FileName),
+                        FileSizeInBytes = imageUploadRequestDto.File.Length,
+                        FileName = imageUploadRequestDto.FileName,
+                        FileDescription = imageUploadRequestDto.FileDescription,
                     };
 
+                    await imageRepository.Upload(imageDatabaseModel);
 
-
+                    return Ok(imageDatabaseModel);
 
                 }
 
